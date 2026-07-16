@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --sage: #87a882;
+    --sage-light: #b5cdb2;
+    --sage-dark: #5e7d59;
+    --lavender: #b8a9c9;
+    --lavender-light: #d4cbdf;
+    --lavender-dark: #8e7aab;
+    --cream: #faf6ef;
+    --cream-dark: #f0e9dd;
+    --blush: #e8c5c1;
+    --text-dark: #2d2d2d;
+    --text-medium: #555;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background-color: #faf6ef;
+    color: #2d2d2d;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Georgia', 'Times New Roman', serif;
+  }
+}
