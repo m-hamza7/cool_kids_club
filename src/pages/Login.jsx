@@ -92,7 +92,7 @@ export default function Login() {
                   onChange={(e) => setPhone(e.target.value)}
                   required
                   className="w-full px-4 py-3 rounded-xl border border-[#e8e0d8] bg-[#FAFAF5] text-[#2d2d2d] focus:outline-none focus:border-[#5DA05A] focus:ring-2 focus:ring-[#5DA05A]/20 transition"
-                  placeholder="+1234567890"
+                  placeholder="+923245434223"
                 />
               </div>
             )}
