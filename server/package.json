@@ -1,0 +1,17 @@
+{
+  "name": "ckc-server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file=.env --watch src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.22.0"
+  }
+}

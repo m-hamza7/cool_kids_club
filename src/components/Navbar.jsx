@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 const navLinks = [
   { label: 'Home', to: '/' },
@@ -16,6 +17,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
+  const { user, loading, logout, isAdmin } = useAuth()
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20)
@@ -73,12 +75,44 @@ export default function Navbar() {
               </Link>
             )
           )}
-          <Link
-            to="/join"
-            className="ml-2 px-5 py-2 rounded-full bg-[#5DA05A] text-white text-sm font-semibold hover:bg-[#3D7840] transition-colors shadow-sm"
-          >
-            Join Us
-          </Link>
+
+          {/* Auth buttons */}
+          {!loading && (
+            user ? (
+              <div className="flex items-center gap-3 ml-2">
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    className="text-xs font-semibold px-3 py-1.5 rounded-full bg-[#EEF3FD] text-[#3A6FB8] hover:bg-[#dde8fa] transition-colors"
+                  >
+                    Admin
+                  </Link>
+                )}
+                <Link
+                  to="/profile"
+                  className="w-9 h-9 rounded-full bg-[#5DA05A] flex items-center justify-center text-white text-sm font-bold hover:bg-[#3D7840] transition-colors"
+                  title={user.full_name || user.email}
+                >
+                  {user.full_name?.charAt(0)?.toUpperCase() || user.email?.charAt(0)?.toUpperCase() || '?'}
+                </Link>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 ml-2">
+                <Link
+                  to="/login"
+                  className="text-sm font-medium text-[#555] hover:text-[#5DA05A] transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/signup"
+                  className="px-5 py-2 rounded-full bg-[#5DA05A] text-white text-sm font-semibold hover:bg-[#3D7840] transition-colors shadow-sm"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )
+          )}
         </div>
 
         {/* Mobile burger */}
@@ -125,12 +159,43 @@ export default function Navbar() {
               </Link>
             )
           )}
-          <Link
-            to="/join"
-            className="mt-2 py-3 rounded-full bg-[#5DA05A] text-white text-sm font-semibold text-center hover:bg-[#3D7840] transition-colors"
-          >
-            Join Us
-          </Link>
+
+          {/* Mobile auth */}
+          {!loading && (
+            user ? (
+              <>
+                {isAdmin && (
+                  <Link to="/admin" className="py-2 text-sm font-semibold text-[#3A6FB8] border-b border-[#f0e9dd]">
+                    Admin Dashboard
+                  </Link>
+                )}
+                <Link to="/profile" className="py-2 text-sm font-medium text-[#555] border-b border-[#f0e9dd]">
+                  My Profile
+                </Link>
+                <button
+                  onClick={logout}
+                  className="mt-2 py-3 rounded-full border border-[#e8e0d8] text-[#555] text-sm font-semibold text-center hover:bg-red-50 hover:text-red-600 transition-colors"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="py-2 text-sm font-medium text-[#555] border-b border-[#f0e9dd] hover:text-[#5DA05A]"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/signup"
+                  className="mt-2 py-3 rounded-full bg-[#5DA05A] text-white text-sm font-semibold text-center hover:bg-[#3D7840] transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )
+          )}
         </div>
       )}
     </nav>

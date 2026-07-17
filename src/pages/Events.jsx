@@ -1,10 +1,12 @@
-﻿import { Link } from 'react-router-dom'
+﻿import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Leaf, BookOpen, Globe, Palette, Bell } from '../components/Icons'
+import { useAuth } from '../context/AuthContext'
+import { events as eventsApi } from '../lib/api'
 import Animate from '../components/Animate'
 
-const categories = [
-  {
-    id: 'wellness',
+const categoryMeta = {
+  wellness: {
     label: 'Wellness Events',
     icon: <Leaf className="w-7 h-7" />,
     iconColor: 'text-[#5DA05A]',
@@ -13,31 +15,8 @@ const categories = [
     tag: 'text-[#3D7840] bg-[#EEF7EE]',
     tagLabel: 'Wellness',
     desc: 'A space to explore mindfulness, self-care, emotional awareness, and healthy lifestyle habits.',
-    events: [
-      {
-        title: 'Mindful Moments Workshop',
-        // group yoga / meditation class in session
-        img: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'Self-Care & Stress Management Session',
-        // woman doing yoga / stretching
-        img: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'Emotional Wellness Circle',
-        // people sitting together in an open supportive group
-        img: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'Confidence & Personal Growth Workshop',
-        // woman confidently presenting at a workshop
-        img: 'https://images.unsplash.com/photo-1552581234-26160f608093?w=500&h=280&fit=crop',
-      },
-    ],
   },
-  {
-    id: 'bookclub',
+  bookclub: {
     label: 'Book Club Events',
     icon: <BookOpen className="w-7 h-7" />,
     iconColor: 'text-[#3A6FB8]',
@@ -46,31 +25,8 @@ const categories = [
     tag: 'text-[#3A6FB8] bg-[#EEF3FD]',
     tagLabel: 'Book Club',
     desc: 'A welcoming place for readers to discuss ideas, stories, and personal reflections through books.',
-    events: [
-      {
-        title: 'Monthly Book Discussion Meetup',
-        // small group of friends/students talking over books
-        img: 'https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'Character & Story Analysis Workshop',
-        // person intently reading a book with a cup of coffee
-        img: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'Book-to-Life Reflection Session',
-        // person reading thoughtfully in a cozy setting
-        img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'Creative Writing & Storytelling Workshop',
-        // person actively writing in a workshop environment
-        img: 'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=500&h=280&fit=crop',
-      },
-    ],
   },
-  {
-    id: 'community',
+  community: {
     label: 'Community Events',
     icon: <Globe className="w-7 h-7" />,
     iconColor: 'text-[#D4A830]',
@@ -79,31 +35,8 @@ const categories = [
     tag: 'text-[#9A7820] bg-[#FEF9EA]',
     tagLabel: 'Community',
     desc: 'Events designed to build friendships, meaningful conversations, and a sense of belonging.',
-    events: [
-      {
-        title: 'Community Connection Day',
-        // diverse group of young people laughing together outdoors
-        img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'Friendship & Support Gathering',
-        // close friends hugging and supporting each other
-        img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'Mental Health Awareness Meetup',
-        // people in an open, supportive group conversation
-        img: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'Community Celebration Event',
-        // group of people celebrating joyfully together
-        img: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=500&h=280&fit=crop',
-      },
-    ],
   },
-  {
-    id: 'creativity',
+  creativity: {
     label: 'Creativity Club Workshops',
     icon: <Palette className="w-7 h-7" />,
     iconColor: 'text-[#E8834A]',
@@ -112,32 +45,64 @@ const categories = [
     tag: 'text-[#C06030] bg-[#FEF3EA]',
     tagLabel: 'Creativity',
     desc: 'Creative sessions that encourage imagination, artistic expression, and discovering new talents.',
-    events: [
-      {
-        title: 'Art & Painting Workshop',
-        // people painting on canvases together in a class
-        img: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'Journaling & Vision Board Session',
-        // person cutting and arranging a vision board with magazines
-        img: 'https://images.unsplash.com/photo-1517842645767-c639042777db?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'DIY Crafts & Creative Activities',
-        // hands crafting / making things in a workshop
-        img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&h=280&fit=crop',
-      },
-      {
-        title: 'Photography & Storytelling Workshop',
-        // person looking through camera viewfinder
-        img: 'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=500&h=280&fit=crop',
-      },
-    ],
   },
-]
+}
+
+const CATEGORY_ORDER = ['wellness', 'bookclub', 'community', 'creativity']
 
 export default function Events() {
+  const { user } = useAuth()
+  const [eventsByCategory, setEventsByCategory] = useState({})
+  const [attendance, setAttendance] = useState({})
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const { events } = await eventsApi.list()
+        const grouped = {}
+        for (const ev of events) {
+          if (!grouped[ev.category]) grouped[ev.category] = []
+          grouped[ev.category].push(ev)
+        }
+        setEventsByCategory(grouped)
+
+        if (user) {
+          const att = {}
+          await Promise.all(
+            events.map(async (ev) => {
+              try {
+                const data = await eventsApi.getAttendance(ev.id)
+                att[ev.id] = data
+              } catch { /* ignore */ }
+            })
+          )
+          setAttendance(att)
+        }
+      } catch { /* ignore */ }
+      setLoading(false)
+    }
+    load()
+  }, [user])
+
+  const handleAttend = async (eventId, status) => {
+    if (!user) return
+    try {
+      await eventsApi.attend(eventId, status)
+      const data = await eventsApi.getAttendance(eventId)
+      setAttendance((a) => ({ ...a, [eventId]: data }))
+    } catch { /* ignore */ }
+  }
+
+  const removeAttendance = async (eventId) => {
+    try {
+      await eventsApi.removeAttendance(eventId)
+      setAttendance((a) => ({ ...a, [eventId]: { count: (a[eventId]?.count || 1) - 1, userStatus: null } }))
+    } catch { /* ignore */ }
+  }
+
+  const categories = CATEGORY_ORDER.filter((id) => eventsByCategory[id]?.length)
+
   return (
     <div>
       {/* Hero */}
@@ -157,85 +122,132 @@ export default function Events() {
         </Animate>
       </section>
 
-      {/* Category quick-nav */}
-      <div className="bg-white border-b border-[#f0e9dd] sticky top-16 z-30">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex gap-2 overflow-x-auto">
-          {categories.map((cat) => (
-            <a
-              key={cat.id}
-              href={`#${cat.id}`}
-              className="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors bg-[#FAFAF5] text-[#555] hover:bg-[#EEF7EE] hover:text-[#2d2d2d]"
-            >
-              {cat.label}
-            </a>
-          ))}
+      {loading ? (
+        <div className="flex justify-center py-20">
+          <div className="w-8 h-8 border-4 border-[#5DA05A] border-t-transparent rounded-full animate-spin" />
         </div>
-      </div>
-
-      {/* Category sections */}
-      {categories.map((cat, ci) => (
-        <section
-          key={cat.id}
-          id={cat.id}
-          className={`py-20 scroll-mt-32 ${ci % 2 === 0 ? 'bg-[#FAFAF5]' : 'bg-white'}`}
-        >
-          <div className="max-w-6xl mx-auto px-6">
-            {/* Category header */}
-            <Animate animation="fade-up">
-              <div className="flex flex-col md:flex-row md:items-center gap-5 mb-12">
-                <div className={`w-16 h-16 rounded-2xl ${cat.iconBg} flex items-center justify-center flex-shrink-0 ${cat.iconColor}`}>
-                  {cat.icon}
-                </div>
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#2d2d2d] font-display">{cat.label}</h2>
-                  <p className="text-[#555] mt-1 max-w-xl">{cat.desc}</p>
-                </div>
-              </div>
-            </Animate>
-
-            {/* Event cards */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {cat.events.map((event, i) => (
-                <Animate key={event.title} animation="fade-up" delay={i * 80}>
-                  <div className={`bg-white rounded-2xl border border-[#f0e9dd] border-t-4 ${cat.border} overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1 flex flex-col h-full`}>
-                    {/* Image */}
-                    <div className="relative overflow-hidden">
-                      <img
-                        src={event.img}
-                        alt={event.title}
-                        className="w-full h-44 object-cover"
-                      />
-                      {/* Category badge over image */}
-                      <span className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${cat.tag} bg-opacity-90`}>
-                        {cat.tagLabel}
-                      </span>
-                    </div>
-
-                    {/* Body */}
-                    <div className="px-4 py-4 flex flex-col flex-1">
-                      <h3 className="font-bold text-[#2d2d2d] text-sm leading-snug mb-3 flex-1">{event.title}</h3>
-
-                      {/* Coming Soon + Notify */}
-                      <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#f0e9dd]">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#fef3cd] text-[#92650a] text-xs font-semibold">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#D4A830] inline-block" />
-                          Coming Soon
-                        </span>
-                        <Link
-                          to="/join"
-                          className="text-xs font-semibold text-[#5DA05A] hover:underline"
-                        >
-                          Notify me →
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </Animate>
+      ) : (
+        <>
+          {/* Category quick-nav */}
+          <div className="bg-white border-b border-[#f0e9dd] sticky top-16 z-30">
+            <div className="max-w-6xl mx-auto px-6 py-4 flex gap-2 overflow-x-auto">
+              {categories.map((id) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  className="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors bg-[#FAFAF5] text-[#555] hover:bg-[#EEF7EE] hover:text-[#2d2d2d]"
+                >
+                  {categoryMeta[id]?.label || id}
+                </a>
               ))}
             </div>
           </div>
-        </section>
-      ))}
+
+          {/* Category sections */}
+          {categories.map((catId, ci) => {
+            const cat = categoryMeta[catId]
+            const catEvents = eventsByCategory[catId] || []
+            return (
+              <section
+                key={catId}
+                id={catId}
+                className={`py-20 scroll-mt-32 ${ci % 2 === 0 ? 'bg-[#FAFAF5]' : 'bg-white'}`}
+              >
+                <div className="max-w-6xl mx-auto px-6">
+                  <Animate animation="fade-up">
+                    <div className="flex flex-col md:flex-row md:items-center gap-5 mb-12">
+                      <div className={`w-16 h-16 rounded-2xl ${cat.iconBg} flex items-center justify-center flex-shrink-0 ${cat.iconColor}`}>
+                        {cat.icon}
+                      </div>
+                      <div>
+                        <h2 className="text-2xl md:text-3xl font-bold text-[#2d2d2d] font-display">{cat.label}</h2>
+                        <p className="text-[#555] mt-1 max-w-xl">{cat.desc}</p>
+                      </div>
+                    </div>
+                  </Animate>
+
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    {catEvents.map((event, i) => {
+                      const att = attendance[event.id]
+                      const userStatus = att?.userStatus
+                      return (
+                        <Animate key={event.id} animation="fade-up" delay={i * 80}>
+                          <div className={`bg-white rounded-2xl border border-[#f0e9dd] border-t-4 ${cat.border} overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1 flex flex-col h-full`}>
+                            <div className="relative overflow-hidden">
+                              <img
+                                src={event.image_url}
+                                alt={event.title}
+                                className="w-full h-44 object-cover"
+                              />
+                              <span className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${cat.tag} bg-opacity-90`}>
+                                {cat.tagLabel}
+                              </span>
+                              {att?.count > 0 && (
+                                <span className="absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-medium bg-white/90 text-[#555] backdrop-blur-sm">
+                                  {att.count} interested
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="px-4 py-4 flex flex-col flex-1">
+                              <h3 className="font-bold text-[#2d2d2d] text-sm leading-snug mb-1 flex-1">{event.title}</h3>
+                              {event.event_date && (
+                                <p className="text-xs text-[#888] mb-3">
+                                  {new Date(event.event_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                  {event.event_time ? ` at ${event.event_time}` : ''}
+                                </p>
+                              )}
+
+                              <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#f0e9dd]">
+                                {event.event_date ? (
+                                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EEF7EE] text-[#3D7840] text-xs font-semibold">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#5DA05A] inline-block" />
+                                    Upcoming
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#fef3cd] text-[#92650a] text-xs font-semibold">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4A830] inline-block" />
+                                    Coming Soon
+                                  </span>
+                                )}
+
+                                {user ? (
+                                  userStatus && userStatus !== 'not_attending' ? (
+                                    <button
+                                      onClick={() => removeAttendance(event.id)}
+                                      className="text-xs font-semibold text-[#3D7840] bg-[#EEF7EE] px-2.5 py-1 rounded-full hover:bg-[#d6edd6] transition-colors"
+                                    >
+                                      ✓ {userStatus === 'attending' ? 'Attending' : 'Interested'}
+                                    </button>
+                                  ) : (
+                                    <button
+                                      onClick={() => handleAttend(event.id, 'interested')}
+                                      className="text-xs font-semibold text-[#5DA05A] hover:underline"
+                                    >
+                                      I'm interested →
+                                    </button>
+                                  )
+                                ) : (
+                                  <Link
+                                    to="/login"
+                                    className="text-xs font-semibold text-[#5DA05A] hover:underline"
+                                  >
+                                    Sign in to RSVP →
+                                  </Link>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </Animate>
+                      )
+                    })}
+                  </div>
+                </div>
+              </section>
+            )
+          })}
+        </>
+      )}
 
       {/* CTA */}
       <section className="py-20 bg-[#2d2d2d]">
@@ -252,10 +264,10 @@ export default function Events() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                to="/join"
+                to={user ? '/profile' : '/signup'}
                 className="px-8 py-4 rounded-full bg-[#5DA05A] text-white font-semibold hover:bg-[#3D7840] transition-all"
               >
-                Join Free &amp; Get Notified
+                {user ? 'View My Events' : 'Join Free & Get Notified'}
               </Link>
               <Link
                 to="/membership"
