@@ -54,7 +54,7 @@ export default function Membership() {
 
   const handlePremiumClick = () => {
     if (!user) {
-      navigate('/join?plan=premium')
+      navigate('/join')
     } else {
       document.getElementById('premium-instructions')?.scrollIntoView({ behavior: 'smooth' })
     }
@@ -169,7 +169,7 @@ export default function Membership() {
                       : 'First, create a free account on our Join page. It takes under 2 minutes.'}
                   </p>
                   {!user && (
-                    <Link to="/join?plan=premium" className="inline-block mt-3 text-[#5DA05A] text-sm font-semibold underline">
+                    <Link to="/join" className="inline-block mt-3 text-[#5DA05A] text-sm font-semibold underline">
                       Create Account →
                     </Link>
                   )}

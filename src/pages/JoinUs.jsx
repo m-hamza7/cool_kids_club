@@ -1,8 +1,8 @@
 ﻿import { useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   FaceSad, FaceWorried, Sprout, Palette, MessageCircle,
-  Sparkles, Leaf, Gift, Lock, Heart, LogOut, Check,
+  Sparkles, Leaf, Lock, Heart, LogOut, Check,
 } from '../components/Icons'
 import { useAuth } from '../context/AuthContext'
 import { auth as authApi } from '../lib/api'
@@ -51,9 +51,7 @@ const reassurances = [
 export default function JoinUs() {
   const { user, refetchUser } = useAuth()
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const initialPlan = searchParams.get('plan') === 'premium' ? 'premium' : 'free'
-  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '', age: '', why: '', plan: initialPlan })
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '', age: '', why: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -74,7 +72,6 @@ export default function JoinUs() {
         full_name: form.name,
         age_range: form.age,
         reason: form.why,
-        plan: form.plan,
       })
       await refetchUser()
     } catch (err) {
@@ -184,41 +181,6 @@ export default function JoinUs() {
                 </div>
               )}
 
-              {/* Plan toggle */}
-              <div className="flex rounded-2xl overflow-hidden border border-[#f0e9dd] mb-8 p-1 bg-[#FAFAF5]">
-                <button
-                  type="button"
-                  onClick={() => setForm((f) => ({ ...f, plan: 'free' }))}
-                  className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all ${
-                    form.plan === 'free' ? 'bg-white shadow-sm text-[#2d2d2d]' : 'text-[#888]'
-                  }`}
-                >
-                  Free Plan
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setForm((f) => ({ ...f, plan: 'premium' }))}
-                  className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-1.5 ${
-                    form.plan === 'premium' ? 'bg-[#5DA05A] shadow-sm text-white' : 'text-[#888]'
-                  }`}
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Premium — $9/mo
-                </button>
-              </div>
-
-              {form.plan === 'premium' && (
-                <div className="mb-8 p-5 rounded-2xl bg-[#FEF9EA] border border-[#D4A830]/30">
-                  <h4 className="font-bold text-[#2d2d2d] text-sm mb-3">How to Activate Premium</h4>
-                  <ol className="text-sm text-[#555] space-y-2 list-decimal list-inside">
-                    <li>Create your account below (you'll start as free)</li>
-                    <li>Send payment to: <strong className="text-[#2d2d2d]">Account Title: Cool Kids Club</strong> — <strong className="text-[#2d2d2d]">Account #: 1234-5678-9012</strong></li>
-                    <li>Send a screenshot of the payment to our <a href="https://ig.me/m/__.coolkidsclub.__" target="_blank" rel="noopener noreferrer" className="text-[#5DA05A] font-semibold underline">Instagram DM</a></li>
-                    <li>Wait for admin confirmation — we'll upgrade your membership within 24 hours</li>
-                  </ol>
-                </div>
-              )}
-
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-[#2d2d2d] mb-1.5">Full Name</label>
@@ -313,7 +275,7 @@ export default function JoinUs() {
                   disabled={loading}
                   className="w-full py-4 rounded-xl bg-[#5DA05A] text-white font-bold text-base hover:bg-[#3D7840] transition-colors shadow-sm mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Creating account...' : form.plan === 'free' ? 'Join the Club — Free' : 'Create Account'}
+                  {loading ? 'Creating account...' : 'Join the Club — Free'}
                 </button>
               </form>
 
