@@ -18,12 +18,12 @@ router.post('/signup', async (req, res) => {
   }
 
   try {
-    const { age_range, reason } = req.body
+    const { age_range, reason, plan } = req.body
     const hash = await bcrypt.hash(password, 12)
     const { rows } = await db.query(
       `INSERT INTO users (email, password_hash, full_name, age_range, reason, membership_plan)
        VALUES ($1, $2, $3, $4, $5, $6) RETURNING ${USER_COLS}`,
-      [email.toLowerCase().trim(), hash, full_name || '', age_range || null, reason || null, 'free']
+      [email.toLowerCase().trim(), hash, full_name || '', age_range || null, reason || null, plan === 'premium' ? 'premium' : 'free']
     )
     const user = rows[0]
     const token = signToken(user.id)
