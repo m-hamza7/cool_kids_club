@@ -4,7 +4,9 @@ import { useAuth } from '../context/AuthContext'
 import Animate from '../components/Animate'
 
 export default function Login() {
+  const [method, setMethod] = useState('email')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -19,7 +21,10 @@ export default function Login() {
     setError('')
     setLoading(true)
     try {
-      await login(email, password)
+      const credentials = method === 'email'
+        ? { email, password }
+        : { phone, password }
+      await login(credentials)
       navigate(from, { replace: true })
     } catch (err) {
       setError(err.message || 'Login failed')
@@ -44,17 +49,53 @@ export default function Login() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-[#2d2d2d] mb-1.5">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-3 rounded-xl border border-[#e8e0d8] bg-[#FAFAF5] text-[#2d2d2d] focus:outline-none focus:border-[#5DA05A] focus:ring-2 focus:ring-[#5DA05A]/20 transition"
-                placeholder="you@example.com"
-              />
+            {/* Method toggle */}
+            <div className="flex rounded-xl border border-[#e8e0d8] overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setMethod('email')}
+                className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
+                  method === 'email' ? 'bg-[#5DA05A] text-white' : 'bg-[#FAFAF5] text-[#555] hover:bg-[#f0e9dd]'
+                }`}
+              >
+                Email
+              </button>
+              <button
+                type="button"
+                onClick={() => setMethod('phone')}
+                className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
+                  method === 'phone' ? 'bg-[#5DA05A] text-white' : 'bg-[#FAFAF5] text-[#555] hover:bg-[#f0e9dd]'
+                }`}
+              >
+                Phone
+              </button>
             </div>
+
+            {method === 'email' ? (
+              <div>
+                <label className="block text-sm font-medium text-[#2d2d2d] mb-1.5">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 rounded-xl border border-[#e8e0d8] bg-[#FAFAF5] text-[#2d2d2d] focus:outline-none focus:border-[#5DA05A] focus:ring-2 focus:ring-[#5DA05A]/20 transition"
+                  placeholder="you@example.com"
+                />
+              </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-[#2d2d2d] mb-1.5">Phone Number</label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 rounded-xl border border-[#e8e0d8] bg-[#FAFAF5] text-[#2d2d2d] focus:outline-none focus:border-[#5DA05A] focus:ring-2 focus:ring-[#5DA05A]/20 transition"
+                  placeholder="+1234567890"
+                />
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-[#2d2d2d] mb-1.5">Password</label>

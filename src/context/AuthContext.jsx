@@ -20,14 +20,8 @@ export function AuthProvider({ children }) {
 
   useEffect(() => { fetchUser() }, [fetchUser])
 
-  const login = async (email, password) => {
-    const { user } = await authApi.login({ email, password })
-    setUser(user)
-    return user
-  }
-
-  const signup = async (email, password, full_name) => {
-    const { user } = await authApi.signup({ email, password, full_name })
+  const login = async (credentials) => {
+    const { user } = await authApi.login(credentials)
     setUser(user)
     return user
   }
@@ -40,7 +34,7 @@ export function AuthProvider({ children }) {
   const isAdmin = user?.role === 'admin'
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout, isAdmin, refetchUser: fetchUser }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, isAdmin, refetchUser: fetchUser }}>
       {children}
     </AuthContext.Provider>
   )

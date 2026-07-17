@@ -25,7 +25,8 @@ class ApiError extends Error {
 
 // ── Auth ─────────────────────────────────────────────────────
 export const auth = {
-  signup: (body) => request('/auth/signup', { method: 'POST', body: JSON.stringify(body) }),
+  sendOtp: (body) => request('/auth/send-otp', { method: 'POST', body: JSON.stringify(body) }),
+  verifyOtp: (body) => request('/auth/verify-otp', { method: 'POST', body: JSON.stringify(body) }),
   login: (body) => request('/auth/login', { method: 'POST', body: JSON.stringify(body) }),
   logout: () => request('/auth/logout', { method: 'POST' }),
   me: () => request('/auth/me'),
