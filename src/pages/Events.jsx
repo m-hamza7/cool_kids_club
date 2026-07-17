@@ -264,7 +264,7 @@ export default function Events() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                to={user ? '/profile' : '/signup'}
+                to={user ? '/profile' : '/join'}
                 className="px-8 py-4 rounded-full bg-[#5DA05A] text-white font-semibold hover:bg-[#3D7840] transition-all"
               >
                 {user ? 'View My Events' : 'Join Free & Get Notified'}

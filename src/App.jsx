@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -12,7 +12,6 @@ import JoinUs from './pages/JoinUs'
 import Contact from './pages/Contact'
 import Donate from './pages/Donate'
 import Login from './pages/Login'
-import Signup from './pages/Signup'
 import Profile from './pages/Profile'
 import AdminDashboard from './pages/admin/Dashboard'
 import ManageEvents from './pages/admin/ManageEvents'
@@ -35,7 +34,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/donate" element={<Donate />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/signup" element={<Navigate to="/join" replace />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
           <Route path="/admin/events" element={<ProtectedRoute adminOnly><ManageEvents /></ProtectedRoute>} />

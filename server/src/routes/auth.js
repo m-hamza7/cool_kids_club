@@ -5,7 +5,7 @@ import { requireAuth, signToken, COOKIE_OPTIONS } from '../middleware/auth.js'
 
 const router = Router()
 
-const USER_COLS = 'id, email, phone, full_name, avatar_url, role, membership_plan, membership_status, created_at, updated_at'
+const USER_COLS = 'id, email, phone, full_name, avatar_url, age_range, reason, role, membership_plan, membership_status, created_at, updated_at'
 
 // POST /api/auth/signup
 router.post('/signup', async (req, res) => {
@@ -18,10 +18,12 @@ router.post('/signup', async (req, res) => {
   }
 
   try {
+    const { age_range, reason, plan } = req.body
     const hash = await bcrypt.hash(password, 12)
     const { rows } = await db.query(
-      `INSERT INTO users (email, password_hash, full_name) VALUES ($1, $2, $3) RETURNING ${USER_COLS}`,
-      [email.toLowerCase().trim(), hash, full_name || '']
+      `INSERT INTO users (email, password_hash, full_name, age_range, reason, membership_plan)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING ${USER_COLS}`,
+      [email.toLowerCase().trim(), hash, full_name || '', age_range || null, reason || null, plan === 'premium' ? 'premium' : 'free']
     )
     const user = rows[0]
     const token = signToken(user.id)
@@ -44,7 +46,7 @@ router.post('/login', async (req, res) => {
   }
 
   const { rows } = await db.query(
-    `SELECT id, email, phone, password_hash, full_name, avatar_url, role, membership_plan, membership_status, created_at, updated_at FROM users WHERE email = $1`,
+    `SELECT id, email, phone, password_hash, full_name, avatar_url, age_range, reason, role, membership_plan, membership_status, created_at, updated_at FROM users WHERE email = $1`,
     [email.toLowerCase().trim()]
   )
   const row = rows[0]

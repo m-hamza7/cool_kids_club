@@ -105,7 +105,7 @@ export default function Navbar() {
                   Sign In
                 </Link>
                 <Link
-                  to="/signup"
+                  to="/join"
                   className="px-5 py-2 rounded-full bg-[#5DA05A] text-white text-sm font-semibold hover:bg-[#3D7840] transition-colors shadow-sm"
                 >
                   Sign Up
@@ -188,7 +188,7 @@ export default function Navbar() {
                   Sign In
                 </Link>
                 <Link
-                  to="/signup"
+                  to="/join"
                   className="mt-2 py-3 rounded-full bg-[#5DA05A] text-white text-sm font-semibold text-center hover:bg-[#3D7840] transition-colors"
                 >
                   Sign Up

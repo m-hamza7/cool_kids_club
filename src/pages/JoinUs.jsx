@@ -1,9 +1,11 @@
 ﻿import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   FaceSad, FaceWorried, Sprout, Palette, MessageCircle,
   Sparkles, Leaf, Gift, Lock, Heart, LogOut, Check,
 } from '../components/Icons'
+import { useAuth } from '../context/AuthContext'
+import { auth as authApi } from '../lib/api'
 import Animate from '../components/Animate'
 
 const steps = [
@@ -47,19 +49,43 @@ const reassurances = [
 ]
 
 export default function JoinUs() {
-  const [form, setForm] = useState({ name: '', email: '', age: '', why: '', plan: 'free' })
-  const [submitted, setSubmitted] = useState(false)
+  const { user, refetchUser } = useAuth()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const initialPlan = searchParams.get('plan') === 'premium' ? 'premium' : 'free'
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '', age: '', why: '', plan: initialPlan })
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
+    setError('')
+
+    if (form.password !== form.confirm) return setError('Passwords do not match')
+    if (form.password.length < 6) return setError('Password must be at least 6 characters')
+
+    setLoading(true)
+    try {
+      await authApi.signup({
+        email: form.email,
+        password: form.password,
+        full_name: form.name,
+        age_range: form.age,
+        reason: form.why,
+        plan: form.plan,
+      })
+      await refetchUser()
+    } catch (err) {
+      setError(err.message || 'Could not create account')
+    }
+    setLoading(false)
   }
 
   return (
     <div>
-      {/* Hero — soft sage, no gradient */}
+      {/* Hero */}
       <section className="pt-32 pb-16 px-6 text-center bg-[#EEF7EE]">
         <Animate animation="fade-up">
           <span className="text-[#5DA05A] text-sm font-semibold uppercase tracking-widest">Welcome Home</span>
@@ -87,7 +113,7 @@ export default function JoinUs() {
             ))}
           </div>
           <p className="text-center mt-6 text-[#888] text-sm">
-            Whatever brought you here  you're welcome exactly as you are.
+            Whatever brought you here — you're welcome exactly as you are.
           </p>
         </div>
       </section>
@@ -114,10 +140,10 @@ export default function JoinUs() {
         </div>
       </section>
 
-      {/* Sign Up Form */}
+      {/* Sign Up Form / Welcome */}
       <section className="py-20 bg-white">
         <div className="max-w-xl mx-auto px-6">
-          {submitted ? (
+          {user ? (
             <div className="text-center py-16">
               <div className="flex justify-center mb-4">
                 <div className="w-20 h-20 rounded-full bg-[#EEF7EE] flex items-center justify-center">
@@ -125,23 +151,25 @@ export default function JoinUs() {
                 </div>
               </div>
               <h2 className="text-3xl font-bold text-[#2d2d2d] mb-3 font-display">
-                Welcome to the Club, {form.name.split(' ')[0]}!
+                Welcome to the Club, {user.full_name?.split(' ')[0] || 'Cool Kid'}!
               </h2>
               <p className="text-[#555] mb-6 leading-relaxed">
-                We're so glad you're here. Check your inbox  we've sent you a welcome email with everything you need to get started.
+                You're already a member. Explore events, read the founder's letter, or check your profile.
               </p>
-              <div className="bg-[#EEF7EE] rounded-2xl p-6 border border-[#5DA05A]/30 mb-6">
-                <div className="flex items-center justify-center gap-2 text-[#3D7840] text-sm font-medium">
-                  <Gift className="w-5 h-5" />
-                  <p>Your first event invite and welcome kit are on their way to <strong>{form.email}</strong></p>
-                </div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  to="/events"
+                  className="px-6 py-3 rounded-full bg-[#5DA05A] text-white font-semibold hover:bg-[#3D7840] transition-colors"
+                >
+                  Browse Events
+                </Link>
+                <Link
+                  to="/profile"
+                  className="px-6 py-3 rounded-full border-2 border-[#5DA05A] text-[#5DA05A] font-semibold hover:bg-[#5DA05A] hover:text-white transition-all"
+                >
+                  My Profile
+                </Link>
               </div>
-              <Link
-                to="/events"
-                className="inline-block px-6 py-3 rounded-full bg-[#5DA05A] text-white font-semibold hover:bg-[#3D7840] transition-colors"
-              >
-                Browse Upcoming Events
-              </Link>
             </div>
           ) : (
             <div>
@@ -150,9 +178,16 @@ export default function JoinUs() {
                 <p className="text-[#555] mt-2">Free forever. No credit card required.</p>
               </div>
 
+              {error && (
+                <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
+                  {error}
+                </div>
+              )}
+
               {/* Plan toggle */}
               <div className="flex rounded-2xl overflow-hidden border border-[#f0e9dd] mb-8 p-1 bg-[#FAFAF5]">
                 <button
+                  type="button"
                   onClick={() => setForm((f) => ({ ...f, plan: 'free' }))}
                   className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all ${
                     form.plan === 'free' ? 'bg-white shadow-sm text-[#2d2d2d]' : 'text-[#888]'
@@ -161,15 +196,28 @@ export default function JoinUs() {
                   Free Plan
                 </button>
                 <button
+                  type="button"
                   onClick={() => setForm((f) => ({ ...f, plan: 'premium' }))}
                   className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-1.5 ${
                     form.plan === 'premium' ? 'bg-[#5DA05A] shadow-sm text-white' : 'text-[#888]'
                   }`}
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  Premium  $9/mo
+                  Premium — $9/mo
                 </button>
               </div>
+
+              {form.plan === 'premium' && (
+                <div className="mb-8 p-5 rounded-2xl bg-[#FEF9EA] border border-[#D4A830]/30">
+                  <h4 className="font-bold text-[#2d2d2d] text-sm mb-3">How to Activate Premium</h4>
+                  <ol className="text-sm text-[#555] space-y-2 list-decimal list-inside">
+                    <li>Create your account below (you'll start as free)</li>
+                    <li>Send payment to: <strong className="text-[#2d2d2d]">Account Title: Cool Kids Club</strong> — <strong className="text-[#2d2d2d]">Account #: 1234-5678-9012</strong></li>
+                    <li>Send a screenshot of the payment to our <a href="https://ig.me/m/__.coolkidsclub.__" target="_blank" rel="noopener noreferrer" className="text-[#5DA05A] font-semibold underline">Instagram DM</a></li>
+                    <li>Wait for admin confirmation — we'll upgrade your membership within 24 hours</li>
+                  </ol>
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
@@ -195,6 +243,33 @@ export default function JoinUs() {
                     placeholder="your@email.com"
                     className="w-full px-4 py-3 rounded-xl border border-[#e8e0d8] bg-[#FAFAF5] text-[#2d2d2d] text-sm focus:outline-none focus:border-[#5DA05A] placeholder-[#bbb]"
                   />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[#2d2d2d] mb-1.5">Password</label>
+                    <input
+                      type="password"
+                      name="password"
+                      value={form.password}
+                      onChange={handleChange}
+                      required
+                      minLength={6}
+                      placeholder="Min 6 characters"
+                      className="w-full px-4 py-3 rounded-xl border border-[#e8e0d8] bg-[#FAFAF5] text-[#2d2d2d] text-sm focus:outline-none focus:border-[#5DA05A] placeholder-[#bbb]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[#2d2d2d] mb-1.5">Confirm Password</label>
+                    <input
+                      type="password"
+                      name="confirm"
+                      value={form.confirm}
+                      onChange={handleChange}
+                      required
+                      placeholder="••••••••"
+                      className="w-full px-4 py-3 rounded-xl border border-[#e8e0d8] bg-[#FAFAF5] text-[#2d2d2d] text-sm focus:outline-none focus:border-[#5DA05A] placeholder-[#bbb]"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-[#2d2d2d] mb-1.5">Age</label>
@@ -235,15 +310,16 @@ export default function JoinUs() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-4 rounded-xl bg-[#5DA05A] text-white font-bold text-base hover:bg-[#3D7840] transition-colors shadow-sm mt-2"
+                  disabled={loading}
+                  className="w-full py-4 rounded-xl bg-[#5DA05A] text-white font-bold text-base hover:bg-[#3D7840] transition-colors shadow-sm mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {form.plan === 'free' ? 'Join the Club  Free' : 'Start Premium  7 Days Free'}
+                  {loading ? 'Creating account...' : form.plan === 'free' ? 'Join the Club — Free' : 'Create Account'}
                 </button>
               </form>
 
               <p className="text-center text-xs text-[#aaa] mt-4">
                 Already a member?{' '}
-                <a href="#" className="text-[#5DA05A] underline">Sign in here</a>
+                <Link to="/login" className="text-[#5DA05A] underline">Sign in here</Link>
               </p>
             </div>
           )}
