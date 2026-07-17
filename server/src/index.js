@@ -10,16 +10,8 @@ import { optionalAuth } from './middleware/auth.js'
 const app = express()
 const PORT = process.env.PORT || 3001
 
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  'http://localhost:5173',
-].filter(Boolean)
-
 app.use(cors({
-  origin: (origin, cb) => {
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true)
-    cb(null, true) // allow all for now — tighten after testing
-  },
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true,
 }))
 app.use(express.json())
