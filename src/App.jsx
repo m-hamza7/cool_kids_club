@@ -9,6 +9,7 @@ import Events from './pages/Events'
 import Blog from './pages/Blog'
 import JoinUs from './pages/JoinUs'
 import Contact from './pages/Contact'
+import Donate from './pages/Donate'
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/join" element={<JoinUs />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/donate" element={<Donate />} />
         </Routes>
       </main>
       <Footer />

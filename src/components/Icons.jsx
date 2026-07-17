@@ -1,5 +1,5 @@
-// Centralized SVG icon library — all icons are inline SVGs, no external dependencies.
-// Usage: <Icons.Leaf className="w-6 h-6 text-[#87a882]" />
+﻿// Centralized SVG icon library — all icons are inline SVGs, no external dependencies.
+// Usage: <Icons.Leaf className="w-6 h-6 text-[#5DA05A]" />
 
 const base = (d, opts = {}) =>
   ({ className = 'w-6 h-6', color, strokeWidth = 1.5, fill = 'none' } = {}) => (
@@ -305,9 +305,46 @@ export const Gift = ({ className = 'w-6 h-6', strokeWidth = 1.5 } = {}) => (
   </svg>
 )
 
+// Bell / notification
+export const Bell = ({ className = 'w-6 h-6', strokeWidth = 1.5 } = {}) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+  </svg>
+)
+
+// DollarSign / donate
+export const DollarSign = ({ className = 'w-6 h-6', strokeWidth = 1.5 } = {}) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <line x1="12" x2="12" y1="2" y2="22" />
+    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+  </svg>
+)
+
+// HandRaised / volunteer
+export const HandRaised = ({ className = 'w-6 h-6', strokeWidth = 1.5 } = {}) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2" />
+    <path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2" />
+    <path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" />
+    <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
+  </svg>
+)
+
+// Repeat / recurring donation
+export const Repeat = ({ className = 'w-6 h-6', strokeWidth = 1.5 } = {}) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <path d="m17 2 4 4-4 4" />
+    <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+    <path d="m7 22-4-4 4-4" />
+    <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+  </svg>
+)
+
 export default {
   Leaf, Sprout, Sparkles, Palette, Heart, Shield, Handshake, Target, Globe,
   MessageCircle, BookOpen, Music, Notebook, Meditation, ExternalLink,
   Calendar, Clock, CheckCircle, Zap, Mail, MailCheck, Newspaper,
-  AlertTriangle, Lock, LogOut, FaceSad, FaceWorried, Users, Star, Check, ArrowRight, Gift,
+  AlertTriangle, Lock, LogOut, FaceSad, FaceWorried, Users, Star, Check, ArrowRight, Gift, Bell,
+  DollarSign, HandRaised, Repeat,
 }

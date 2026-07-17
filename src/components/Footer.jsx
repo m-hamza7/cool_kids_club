@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 
 export default function Footer() {
   return (
@@ -8,7 +8,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#87a882] to-[#b8a9c9] flex items-center justify-center">
+              <div className="w-9 h-9 rounded-full bg-[#5DA05A] flex items-center justify-center">
                 <span className="text-white text-sm font-bold">CK</span>
               </div>
               <span className="font-bold text-lg">Cool Kids Club</span>
@@ -21,7 +21,7 @@ export default function Footer() {
                 <a
                   key={s}
                   href="#"
-                  className="text-xs text-gray-400 hover:text-[#87a882] transition-colors border border-gray-600 rounded-full px-3 py-1"
+                  className="text-xs text-gray-400 hover:text-[#5DA05A] transition-colors border border-gray-600 rounded-full px-3 py-1"
                 >
                   {s}
                 </a>
@@ -40,7 +40,7 @@ export default function Footer() {
                 { label: 'Events', to: '/events' },
               ].map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} className="text-gray-400 text-sm hover:text-[#87a882] transition-colors">
+                  <Link to={l.to} className="text-gray-400 text-sm hover:text-[#5DA05A] transition-colors">
                     {l.label}
                   </Link>
                 </li>
@@ -59,7 +59,7 @@ export default function Footer() {
                 { label: 'Contact', to: '/contact' },
               ].map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} className="text-gray-400 text-sm hover:text-[#87a882] transition-colors">
+                  <Link to={l.to} className="text-gray-400 text-sm hover:text-[#5DA05A] transition-colors">
                     {l.label}
                   </Link>
                 </li>
@@ -75,11 +75,11 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="your@email.com"
-                className="px-4 py-2.5 rounded-xl bg-[#3d3d3d] text-white text-sm placeholder-gray-500 border border-gray-600 focus:outline-none focus:border-[#87a882]"
+                className="px-4 py-2.5 rounded-xl bg-[#3d3d3d] text-white text-sm placeholder-gray-500 border border-gray-600 focus:outline-none focus:border-[#5DA05A]"
               />
               <button
                 type="submit"
-                className="px-4 py-2.5 rounded-xl bg-[#87a882] text-white text-sm font-semibold hover:bg-[#5e7d59] transition-colors"
+                className="px-4 py-2.5 rounded-xl bg-[#5DA05A] text-white text-sm font-semibold hover:bg-[#3D7840] transition-colors"
               >
                 Subscribe
               </button>

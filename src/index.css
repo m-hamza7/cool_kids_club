@@ -1,18 +1,33 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 @layer base {
   :root {
-    --sage: #87a882;
-    --sage-light: #b5cdb2;
-    --sage-dark: #5e7d59;
-    --lavender: #b8a9c9;
-    --lavender-light: #d4cbdf;
-    --lavender-dark: #8e7aab;
-    --cream: #faf6ef;
-    --cream-dark: #f0e9dd;
-    --blush: #e8c5c1;
-    --text-dark: #2d2d2d;
-    --text-medium: #555;
+    /* ── 5 Brand Colors (logo hands) ── */
+    --brand-green:        #5DA05A;
+    --brand-green-dark:   #3D7840;
+    --brand-green-light:  #EEF7EE;
+
+    --brand-orange:       #E8834A;
+    --brand-orange-dark:  #C06030;
+    --brand-orange-light: #FEF3EA;
+
+    --brand-blue:         #5490D0;
+    --brand-blue-dark:    #3A6FB8;
+    --brand-blue-light:   #EEF3FD;
+
+    --brand-yellow:       #D4A830;
+    --brand-yellow-dark:  #9A7820;
+    --brand-yellow-light: #FEF9EA;
+
+    --brand-red:          #D45858;
+    --brand-red-dark:     #A83838;
+    --brand-red-light:    #FDEAEA;
+
+    /* ── Neutrals ── */
+    --cream:              #FAFAF5;
+    --cream-dark:         #f0e9dd;
+    --text-dark:          #2d2d2d;
+    --text-medium:        #555;
   }
 
   html {
@@ -21,7 +36,7 @@
 
   body {
     font-family: 'Inter', 'Segoe UI', sans-serif;
-    background-color: #faf6ef;
+    background-color: #FAFAF5;
     color: #2d2d2d;
   }
 }
@@ -29,5 +44,37 @@
 @layer utilities {
   .font-display {
     font-family: 'Georgia', 'Times New Roman', serif;
+  }
+}
+
+/* ── Scroll-triggered animations ── */
+.scroll-anim {
+  transition-property: opacity, transform;
+  transition-duration: 0.65s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.scroll-anim--fade-up         { opacity: 0; transform: translateY(28px); }
+.scroll-anim--fade-up.scroll-anim--visible   { opacity: 1; transform: translateY(0); }
+
+.scroll-anim--fade-in         { opacity: 0; }
+.scroll-anim--fade-in.scroll-anim--visible   { opacity: 1; }
+
+.scroll-anim--slide-left      { opacity: 0; transform: translateX(-36px); }
+.scroll-anim--slide-left.scroll-anim--visible { opacity: 1; transform: translateX(0); }
+
+.scroll-anim--slide-right     { opacity: 0; transform: translateX(36px); }
+.scroll-anim--slide-right.scroll-anim--visible { opacity: 1; transform: translateX(0); }
+
+.scroll-anim--scale-up        { opacity: 0; transform: scale(0.93); }
+.scroll-anim--scale-up.scroll-anim--visible  { opacity: 1; transform: scale(1); }
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-anim {
+    transition: none;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
