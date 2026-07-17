@@ -8,8 +8,8 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-full bg-[#5DA05A] flex items-center justify-center">
-                <span className="text-white text-sm font-bold">CK</span>
+              <div className="w-9 h-9 rounded-full -[#5DA05A] flex items-center justify-center">
+                <img src="/logo.png" alt="CKK" />
               </div>
               <span className="font-bold text-lg">Cool Kids Club</span>
             </div>
