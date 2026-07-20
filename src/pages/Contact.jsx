@@ -5,7 +5,7 @@ import Animate from '../components/Animate'
 
 const faqs = [
   { q: 'How do I reset my password?', a: 'Use the "Forgot password" link on the login page and follow the instructions sent to your email.' },
-  { q: 'How do I upgrade to Premium?', a: 'Go to the Membership page and click "Start Premium." You can also upgrade from your account settings.' },
+  { q: 'How do I upgrade to Premium or Founding Member?', a: 'Go to the Membership page, send payment to our bank account, and share the screenshot via our Instagram DM. Our admin will activate your membership within 24 hours.' },
   { q: 'I need urgent mental health support.', a: "If you're in crisis, please reach out to a crisis line in your country. In Nigeria: Mentally Aware NG  08091116264. Global: Crisis Text Line  text HOME to 741741." },
   { q: 'How do I report a community issue?', a: 'Email us at safety@coolkidsclub.com or use the in-app report button. We take all reports seriously.' },
 ]

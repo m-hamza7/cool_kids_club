@@ -1,28 +1,44 @@
 ﻿import { Link, useNavigate } from 'react-router-dom'
-import { Check, Sparkles } from '../components/Icons'
+import { Check, Sparkles, Star, Gift } from '../components/Icons'
 import { useAuth } from '../context/AuthContext'
 import Animate from '../components/Animate'
 
-const free = [
-  'Access to the public community feed',
-  "Monthly Founder's Letter (email)",
-  'Access to free blog resources',
-  'Invitations to select free events',
-  'Welcome wellness kit (digital)',
-  'Community forum access',
+const community = [
+  'Access to the Cool Kids Club public community',
+  'Weekly virtual community sessions and discussions',
+  'Monthly public meetups and workshops (limited seats)',
+  'Access to public blog articles and resources',
+  'Mental wellness tips and creative inspiration',
+  'Invitations to selected free online events',
+  'Community discussion forum access',
+  'Monthly community newsletter',
+  'Sneak peeks of upcoming events and programs',
 ]
 
 const premium = [
-  'Everything in Free, plus:',
+  'Everything in Community, plus:',
   'Private members-only community spaces',
-  'All live workshops & events (unlimited)',
-  'Monthly 1:1 peer support sessions',
-  'Exclusive creativity challenges & prompts',
-  'Early access to new programs',
-  'Premium resource library (100+ guides)',
-  'Monthly accountability partner matching',
-  'Discord server with curated channels',
-  'Quarterly virtual retreats',
+  'Premium blog articles and exclusive resources',
+  'Monthly 1:1 virtual peer-support session with the Founder',
+  "Monthly Founder's Letter",
+  'Members-only workshops and virtual events',
+  'Art Days, Game Nights, Movie Nights, Music & Chill, Book Club, DIY Workshops',
+  'Guided wellness and creativity workshops',
+  'Monthly themed challenges and creative prompts',
+  'Early access to new programs, events, and meetups',
+  'Premium resource library',
+  'Private Discord/WhatsApp community access',
+]
+
+const founding = [
+  'Everything in Premium, plus:',
+  'Welcome Kit — T-shirt, badge, and stickers',
+  'Recognition as a Founding Member across platforms',
+  'Name featured on the Founders Wall',
+  'Priority access to all future events and programs',
+  'Direct line to the founder for feedback and ideas',
+  'Exclusive Founding Member badge on your profile',
+  'Additional surprise perks and early drops',
 ]
 
 const faqs = [
@@ -31,20 +47,24 @@ const faqs = [
     a: 'CKC is designed for teenagers and young adults aged 14–26 who are interested in mental wellness, personal growth, creativity, and meaningful connection.',
   },
   {
-    q: 'Can I cancel my premium membership anytime?',
-    a: 'Absolutely. Premium membership is month-to-month and you can cancel at any time with no questions asked.',
+    q: 'Can I cancel my membership anytime?',
+    a: 'Absolutely. Paid memberships are month-to-month and you can cancel at any time with no questions asked.',
   },
   {
-    q: 'Is there a student discount?',
-    a: 'Yes! Students get 30% off Premium membership. Just sign up and reach out to our team with your student ID.',
+    q: 'How do I pay for Premium or Founding Member?',
+    a: 'Send the monthly fee to our bank account and share the payment screenshot via our Instagram DM. Our admin will activate your membership within 24 hours.',
   },
   {
-    q: "What if I can't afford Premium?",
+    q: "What if I can't afford a paid plan?",
     a: "We believe cost should never be a barrier. We offer financial hardship waivers — reach out to us privately and we'll work something out.",
   },
   {
     q: 'Are the events live or recorded?',
-    a: 'All events are held live to preserve the community feel. Premium members also get access to all recordings within 24 hours.',
+    a: 'All events are held live to preserve the community feel. Premium and Founding members get access to recordings within 24 hours.',
+  },
+  {
+    q: 'Are Founding Member seats really limited?',
+    a: 'Yes! We are only opening a small number of Founding Member spots. Once they are filled, this tier will be closed permanently.',
   },
 ]
 
@@ -52,11 +72,11 @@ export default function Membership() {
   const { user } = useAuth()
   const navigate = useNavigate()
 
-  const handlePremiumClick = () => {
+  const handlePaidClick = () => {
     if (!user) {
-      navigate('/join?plan=premium')
+      navigate('/join')
     } else {
-      document.getElementById('premium-instructions')?.scrollIntoView({ behavior: 'smooth' })
+      document.getElementById('payment-instructions')?.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
@@ -70,32 +90,36 @@ export default function Membership() {
             Choose Your Path
           </h1>
           <p className="text-[#555] max-w-xl mx-auto text-lg leading-relaxed">
-            Start free and upgrade when you're ready. Both plans give you access to an incredible community — Premium just goes deeper.
+            Start free and upgrade when you're ready. Every plan gives you access to an incredible community.
           </p>
         </Animate>
       </section>
 
       {/* Plans */}
       <section className="py-20 bg-[#FAFAF5]">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-8 items-start">
-            {/* Free */}
-            <Animate animation="slide-left">
-            <div className="bg-white rounded-3xl p-8 border border-[#f0e9dd] shadow-sm">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-6 items-start">
+
+            {/* Community (Free) */}
+            <Animate animation="fade-up" delay={0}>
+            <div className="bg-white rounded-3xl p-8 border border-[#f0e9dd] shadow-sm h-full">
               <div className="inline-block px-3 py-1 rounded-full bg-[#EEF7EE] text-[#3D7840] text-xs font-semibold mb-5">
                 Free Forever
               </div>
-              <h2 className="text-3xl font-bold text-[#2d2d2d] mb-1 font-display">Community</h2>
-              <div className="text-5xl font-bold text-[#5DA05A] mt-4 mb-2">$0</div>
-              <div className="text-[#888] text-sm mb-6">Always free. No credit card needed.</div>
+              <h2 className="text-2xl font-bold text-[#2d2d2d] mb-1 font-display">Community</h2>
+              <p className="text-[#888] text-sm mb-4">A welcoming space for everyone.</p>
+              <div className="flex items-end gap-1 mt-2 mb-1">
+                <span className="text-4xl font-bold text-[#5DA05A]">Rs. 0</span>
+              </div>
+              <div className="text-[#888] text-xs mb-6">No credit card required.</div>
               <Link
                 to={user ? '/events' : '/join'}
-                className="block w-full py-3 rounded-full border-2 border-[#5DA05A] text-[#5DA05A] font-semibold text-center hover:bg-[#5DA05A] hover:text-white transition-all mb-8"
+                className="block w-full py-3 rounded-full border-2 border-[#5DA05A] text-[#5DA05A] font-semibold text-center hover:bg-[#5DA05A] hover:text-white transition-all mb-8 text-sm"
               >
                 {user ? 'Browse Events' : 'Get Started Free'}
               </Link>
               <ul className="space-y-3">
-                {free.map((item) => (
+                {community.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-sm text-[#555]">
                     <Check className="w-4 h-4 text-[#5DA05A] mt-0.5 flex-shrink-0" />
                     {item}
@@ -106,8 +130,8 @@ export default function Membership() {
             </Animate>
 
             {/* Premium */}
-            <Animate animation="slide-right">
-            <div className="bg-[#2d2d2d] rounded-3xl p-8 shadow-xl relative overflow-hidden">
+            <Animate animation="fade-up" delay={100}>
+            <div className="bg-[#2d2d2d] rounded-3xl p-8 shadow-xl relative overflow-hidden h-full">
               <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-[#5DA05A]/10 blur-2xl" />
               <div className="absolute bottom-0 left-0 w-40 h-40 rounded-full bg-[#8AAED8]/10 blur-2xl" />
               <div className="relative">
@@ -115,18 +139,18 @@ export default function Membership() {
                   <Sparkles className="w-3.5 h-3.5" />
                   Most Popular
                 </div>
-                <h2 className="text-3xl font-bold text-white mb-1 font-display">Premium</h2>
-                <div className="flex items-end gap-2 mt-4 mb-1">
-                  <span className="text-5xl font-bold text-[#5DA05A]">$9</span>
-                  <span className="text-gray-400 mb-2">/month</span>
+                <h2 className="text-2xl font-bold text-white mb-1 font-display">Premium</h2>
+                <p className="text-gray-500 text-sm mb-4">Go deeper with exclusive access.</p>
+                <div className="flex items-end gap-1 mt-2 mb-1">
+                  <span className="text-4xl font-bold text-[#5DA05A]">Rs. 1,500</span>
+                  <span className="text-gray-400 mb-1 text-sm">/month</span>
                 </div>
-                <div className="text-gray-500 text-sm mb-1">or $79/year — save 27%</div>
                 <div className="text-gray-500 text-xs mb-6">Billed monthly. Cancel anytime.</div>
                 <button
-                  onClick={handlePremiumClick}
-                  className="block w-full py-3 rounded-full bg-[#5DA05A] text-white font-semibold text-center hover:bg-[#3D7840] transition-all mb-8 cursor-pointer"
+                  onClick={handlePaidClick}
+                  className="block w-full py-3 rounded-full bg-[#5DA05A] text-white font-semibold text-center hover:bg-[#3D7840] transition-all mb-8 cursor-pointer text-sm"
                 >
-                  {user ? 'Upgrade to Premium' : 'Start Premium'}
+                  {user ? 'Upgrade to Premium' : 'Get Premium'}
                 </button>
                 <ul className="space-y-3">
                   {premium.map((item, i) => (
@@ -139,21 +163,57 @@ export default function Membership() {
               </div>
             </div>
             </Animate>
+
+            {/* Founding Member */}
+            <Animate animation="fade-up" delay={200}>
+            <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] rounded-3xl p-8 shadow-xl relative overflow-hidden h-full border border-[#D4A830]/30">
+              <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-[#D4A830]/10 blur-2xl" />
+              <div className="absolute bottom-0 left-0 w-40 h-40 rounded-full bg-[#D4A830]/5 blur-2xl" />
+              <div className="relative">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4A830]/20 text-[#D4A830] text-xs font-semibold mb-5">
+                  <Star className="w-3.5 h-3.5" />
+                  Limited Seats
+                </div>
+                <h2 className="text-2xl font-bold text-white mb-1 font-display">Founding Member</h2>
+                <p className="text-gray-400 text-sm mb-4">Be part of the origin story.</p>
+                <div className="flex items-end gap-1 mt-2 mb-1">
+                  <span className="text-4xl font-bold text-[#D4A830]">Rs. 2,000</span>
+                  <span className="text-gray-400 mb-1 text-sm">/month</span>
+                </div>
+                <div className="text-gray-500 text-xs mb-6">Limited availability. Cancel anytime.</div>
+                <button
+                  onClick={handlePaidClick}
+                  className="block w-full py-3 rounded-full bg-[#D4A830] text-[#1a1a2e] font-semibold text-center hover:bg-[#b8922a] transition-all mb-8 cursor-pointer text-sm"
+                >
+                  {user ? 'Become a Founder' : 'Become a Founder'}
+                </button>
+                <ul className="space-y-3">
+                  {founding.map((item, i) => (
+                    <li key={item} className={`flex items-start gap-3 text-sm ${i === 0 ? 'text-gray-400 font-semibold' : 'text-gray-300'}`}>
+                      {i !== 0 && <Check className="w-4 h-4 text-[#D4A830] mt-0.5 flex-shrink-0" />}
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            </Animate>
+
           </div>
 
-          <div className="mt-8 text-center text-[#888] text-sm">
-            Not sure? <Link to="/contact" className="text-[#5DA05A] underline hover:no-underline">Chat with us</Link> — we'll help you choose.
+          <div className="mt-10 text-center text-[#888] text-sm">
+            Not sure? <a href="https://ig.me/m/__.coolkidsclub.__" target="_blank" rel="noopener noreferrer" className="text-[#5DA05A] underline hover:no-underline">Chat with us</a> — we'll help you choose.
           </div>
         </div>
       </section>
 
-      {/* Premium Payment Instructions */}
-      <section id="premium-instructions" className="py-20 bg-white">
+      {/* Payment Instructions */}
+      <section id="payment-instructions" className="py-20 bg-white">
         <div className="max-w-2xl mx-auto px-6">
           <Animate animation="fade-up">
             <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold text-[#2d2d2d] font-display">How to Activate Premium</h2>
-              <p className="text-[#555] mt-3">Follow these simple steps to unlock your premium membership.</p>
+              <h2 className="text-3xl font-bold text-[#2d2d2d] font-display">How to Activate Your Membership</h2>
+              <p className="text-[#555] mt-3">Follow these simple steps to unlock Premium or Founding Member.</p>
             </div>
 
             <div className="space-y-6">
@@ -169,8 +229,8 @@ export default function Membership() {
                       : 'First, create a free account on our Join page. It takes under 2 minutes.'}
                   </p>
                   {!user && (
-                    <Link to="/join?plan=premium" className="inline-block mt-3 text-[#5DA05A] text-sm font-semibold underline">
-                      Create Account →
+                    <Link to="/join" className="inline-block mt-3 text-[#5DA05A] text-sm font-semibold underline">
+                      Create Account &rarr;
                     </Link>
                   )}
                 </div>
@@ -183,15 +243,25 @@ export default function Membership() {
                   <p className="text-[#555] text-sm leading-relaxed mb-3">
                     Transfer the membership fee to the following account:
                   </p>
-                  <div className="bg-white rounded-xl p-4 border border-[#e8e0d8] space-y-2">
+                  <div className="bg-white rounded-xl p-4 border border-[#e8e0d8] space-y-2 mb-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-[#888]">Account Title</span>
-                      <span className="font-semibold text-[#2d2d2d]">Cool Kids Club</span>
+                      <span className="text-[#888]">Account Name</span>
+                      <span className="font-semibold text-[#2d2d2d]">Areeba Rehman</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-[#888]">Account Number</span>
-                      <span className="font-semibold text-[#2d2d2d]">1234-5678-9012</span>
+                      <span className="text-[#888]">IBAN</span>
+                      <span className="font-semibold text-[#2d2d2d]">PK10UNIL0109000336793339</span>
                     </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-[#888]">Bank</span>
+                      <span className="font-semibold text-[#2d2d2d]">UBL</span>
+                    </div>
+                  </div>
+                  <div className="bg-[#FEF9EA] rounded-xl p-3 border border-[#D4A830]/20">
+                    <p className="text-xs text-[#888]">
+                      <strong className="text-[#2d2d2d]">Premium:</strong> Rs. 1,500/month &nbsp;·&nbsp;
+                      <strong className="text-[#2d2d2d]">Founding Member:</strong> Rs. 2,000/month
+                    </p>
                   </div>
                 </div>
               </div>
@@ -201,7 +271,7 @@ export default function Membership() {
                 <div>
                   <h3 className="font-bold text-[#2d2d2d] mb-1">Send Screenshot via Instagram</h3>
                   <p className="text-[#555] text-sm leading-relaxed mb-3">
-                    Take a screenshot of your payment confirmation and send it to us via Instagram DM.
+                    Take a screenshot of your payment confirmation and send it to us via Instagram DM. Mention which plan you'd like (Premium or Founding Member).
                   </p>
                   <a
                     href="https://ig.me/m/__.coolkidsclub.__"
@@ -220,7 +290,7 @@ export default function Membership() {
                 <div>
                   <h3 className="font-bold text-[#2d2d2d] mb-1">Wait for Confirmation</h3>
                   <p className="text-[#555] text-sm leading-relaxed">
-                    Our admin team will verify your payment and activate your premium membership within 24 hours.
+                    Our admin team will verify your payment and activate your membership within 24 hours.
                     You'll receive a confirmation when your account has been upgraded.
                   </p>
                 </div>
@@ -236,15 +306,25 @@ export default function Membership() {
                 <p className="text-[#555] text-sm">You already have full access to all premium features.</p>
               </div>
             )}
+
+            {user && user.membership_plan === 'founding' && (
+              <div className="mt-10 p-6 rounded-2xl bg-[#FEF9EA] border border-[#D4A830]/30 text-center">
+                <div className="flex items-center justify-center gap-2 text-[#D4A830] font-semibold mb-2">
+                  <Star className="w-5 h-5" />
+                  You're a Founding Member!
+                </div>
+                <p className="text-[#555] text-sm">Thank you for being part of the origin story.</p>
+              </div>
+            )}
           </Animate>
         </div>
       </section>
 
-      {/* What Premium Members Experience */}
+      {/* What Members Experience */}
       <section className="py-20 bg-[#FAFAF5]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-[#2d2d2d] font-display">What Premium Members Experience</h2>
+            <h2 className="text-3xl font-bold text-[#2d2d2d] font-display">What Members Experience</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
@@ -256,7 +336,7 @@ export default function Membership() {
               {
                 img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=280&fit=crop',
                 title: 'Peer Circles',
-                desc: 'Intimate, moderated groups of 6-10 people who meet weekly to share and support.',
+                desc: 'Intimate, moderated groups who meet regularly to share and support each other.',
               },
               {
                 img: 'https://images.unsplash.com/photo-1524503033411-c9566986fc8f?w=400&h=280&fit=crop',

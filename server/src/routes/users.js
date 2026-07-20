@@ -14,7 +14,7 @@ router.get('/stats/overview', async (_req, res) => {
   const { rows } = await db.query(`
     SELECT
       COUNT(*)::int AS "totalUsers",
-      COUNT(*) FILTER (WHERE membership_plan = 'premium')::int AS "premiumUsers",
+      COUNT(*) FILTER (WHERE membership_plan IN ('premium', 'founding'))::int AS "premiumUsers",
       COUNT(*) FILTER (WHERE membership_status = 'active')::int AS "activeUsers",
       (SELECT COUNT(*)::int FROM events) AS "totalEvents",
       (SELECT COUNT(*)::int FROM monthly_letters) AS "totalLetters"

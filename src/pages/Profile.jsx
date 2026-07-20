@@ -33,6 +33,13 @@ export default function Profile() {
   const planColors = {
     free: 'bg-[#EEF7EE] text-[#3D7840]',
     premium: 'bg-[#FEF9EA] text-[#9A7820]',
+    founding: 'bg-[#1a1a2e] text-[#D4A830]',
+  }
+
+  const planLabels = {
+    free: 'Community Member',
+    premium: 'Premium Member',
+    founding: 'Founding Member',
   }
 
   const statusColors = {
@@ -58,7 +65,7 @@ export default function Profile() {
                 <p className="text-[#555] text-sm mt-1">{user?.email}</p>
                 <div className="flex flex-wrap gap-2 mt-3">
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${planColors[user?.membership_plan] || planColors.free}`}>
-                    {user?.membership_plan === 'premium' ? 'Premium Member' : 'Free Member'}
+                    {planLabels[user?.membership_plan] || 'Community Member'}
                   </span>
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[user?.membership_status] || statusColors.active}`}>
                     {user?.membership_status || 'Active'}

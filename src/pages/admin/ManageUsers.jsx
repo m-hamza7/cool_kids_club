@@ -71,6 +71,7 @@ export default function ManageUsers() {
   const planBadge = {
     free: 'bg-[#EEF7EE] text-[#3D7840]',
     premium: 'bg-[#FEF9EA] text-[#9A7820]',
+    founding: 'bg-[#1a1a2e] text-[#D4A830]',
   }
   const statusBadge = {
     active: 'bg-[#EEF7EE] text-[#3D7840]',
@@ -105,8 +106,9 @@ export default function ManageUsers() {
             </select>
             <select value={filterPlan} onChange={(e) => setFilterPlan(e.target.value)} className="px-4 py-2.5 rounded-xl border border-[#e8e0d8] bg-white focus:outline-none focus:border-[#5DA05A]">
               <option value="">All Plans</option>
-              <option value="free">Free</option>
+              <option value="free">Community</option>
               <option value="premium">Premium</option>
+              <option value="founding">Founding Member</option>
             </select>
           </div>
         </Animate>
@@ -131,8 +133,9 @@ export default function ManageUsers() {
                 <div>
                   <label className="block text-sm font-medium text-[#2d2d2d] mb-1">Membership Plan</label>
                   <select value={editForm.membership_plan} onChange={(e) => setEditForm((f) => ({ ...f, membership_plan: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl border border-[#e8e0d8] bg-[#FAFAF5] focus:outline-none focus:border-[#5DA05A]">
-                    <option value="free">Free</option>
+                    <option value="free">Community</option>
                     <option value="premium">Premium</option>
+                    <option value="founding">Founding Member</option>
                   </select>
                 </div>
                 <div>

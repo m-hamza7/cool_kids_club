@@ -105,15 +105,17 @@ export default function About() {
           </Animate>
           <Animate animation="slide-right">
             <div>
-              <h2 className="text-3xl font-bold text-[#2d2d2d] mb-5 font-display">How It All Started</h2>
+              <h2 className="text-3xl font-bold text-[#2d2d2d] mb-5 font-display">About Us</h2>
               <p className="text-[#555] leading-relaxed mb-4">
-                In 2024, founder Areeba Rehman was 22 years old and struggling with anxiety. She looked for communities online and found either toxic positivity or clinical detachment nothing that felt real and safe.
+              Cool Kids Club is more than a community, it’s a place where creativity, mental wellness, and meaningful connections come together. We believe that everyone deserves a safe, welcoming space to learn, grow, and express themselves without judgment.
               </p>
               <p className="text-[#555] leading-relaxed mb-4">
-                She started a small group of close friends. They talked honestly about their mental health, shared resources, celebrated small wins, and held space for hard days. The warmth and realness of that space was unlike anything she had found online.
+              Our mission is to inspire personal growth through engaging workshops, book clubs, wellness activities, creative experiences, and community events that encourage learning, confidence, and genuine friendships. Whether you’re joining as a free member or becoming part of our premium community, you’ll find opportunities to discover new passions, build lasting connections, and become the best version of yourself.
+
               </p>
               <p className="text-[#555] leading-relaxed mb-6">
-                That feeling of being truly seen is what Cool Kids Club is built on. We're just getting started, and we want you here from the very beginning.
+              At Cool Kids Club, we’re building a community where every voice matters, every journey is valued, and no one has to grow alone.
+
               </p>
               <Link
                 to="/join"

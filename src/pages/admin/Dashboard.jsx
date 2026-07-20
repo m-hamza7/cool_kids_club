@@ -14,7 +14,7 @@ export default function AdminDashboard() {
   const cards = stats
     ? [
         { label: 'Total Users', value: stats.totalUsers, color: 'bg-[#EEF7EE] text-[#3D7840]', to: '/admin/users' },
-        { label: 'Premium Members', value: stats.premiumUsers, color: 'bg-[#FEF9EA] text-[#9A7820]', to: '/admin/users' },
+        { label: 'Paid Members', value: stats.premiumUsers, color: 'bg-[#FEF9EA] text-[#9A7820]', to: '/admin/users' },
         { label: 'Active Members', value: stats.activeUsers, color: 'bg-[#EEF3FD] text-[#3A6FB8]', to: '/admin/users' },
         { label: 'Events', value: stats.totalEvents, color: 'bg-[#FEF3EA] text-[#C06030]', to: '/admin/events' },
         { label: 'Letters', value: stats.totalLetters, color: 'bg-[#FAFAF5] text-[#555]', to: '/admin/letters' },
