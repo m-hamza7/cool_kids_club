@@ -60,11 +60,12 @@ export default function FounderLetter() {
             The Founder's Letter
           </h1>
           <p className="text-[#555] text-lg max-w-xl mx-auto leading-relaxed">
-            Every month, Areeba writes an honest, personal letter to the community — about growth, mental health, creativity, and life. Real talk from a real person.
+            Every month, Areeba writes an honest, personal letter to the community  about growth, mental health, creativity, and life. Real talk from a real person.
           </p>
           <div className="mt-8 inline-flex items-center gap-4 bg-white/80 backdrop-blur rounded-2xl px-6 py-4 border border-[#f0e9dd] shadow-sm">
             <img
-              alt="Areeba Khan"
+              src="/areeba_rehman.jpg"
+              alt="Areeba Rehman"
               className="w-12 h-12 rounded-full object-cover border-2 border-[#5DA05A]"
             />
             <div className="text-left">
@@ -83,7 +84,7 @@ export default function FounderLetter() {
           <div className="max-w-3xl mx-auto px-6">
             <div className="border-l-4 border-[#5DA05A] pl-6 mb-10">
               <div className="text-[#5DA05A] text-xs font-semibold uppercase tracking-widest mb-2">
-                Latest Letter — {featured.month}
+                Latest Letter  {featured.month}
               </div>
               <h2 className="text-3xl font-bold text-[#2d2d2d] font-display mb-4">
                 {featured.title}
@@ -114,7 +115,7 @@ export default function FounderLetter() {
           </div>
           <h2 className="text-3xl font-bold text-white mb-3 font-display">Get Each Letter in Your Inbox</h2>
           <p className="text-gray-400 mb-8">
-            The monthly letter is always free. No spam, no sales — just honest words from Areeba, once a month.
+            The monthly letter is always free. No spam, no sales  just honest words from Areeba, once a month.
           </p>
           {subscribed ? (
             <div className="bg-[#5DA05A]/20 border border-[#5DA05A]/40 rounded-2xl p-6">
@@ -174,7 +175,7 @@ export default function FounderLetter() {
           <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-[#2d2d2d] font-display">Past Letters</h2>
-              <p className="text-[#555] mt-2">Every letter is available to all members — free and premium.</p>
+              <p className="text-[#555] mt-2">Every letter is available to all members  free and premium.</p>
             </div>
             <div className="grid md:grid-cols-2 gap-6">
               {pastLetters.map((letter, i) => (

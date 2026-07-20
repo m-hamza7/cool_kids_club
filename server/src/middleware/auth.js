@@ -26,7 +26,7 @@ export async function requireAuth(req, res, next) {
   try {
     const { sub } = jwt.verify(token, JWT_SECRET)
     const { rows } = await db.query(
-      'SELECT id, email, phone, full_name, avatar_url, role, membership_plan, membership_status, created_at, updated_at FROM users WHERE id = $1',
+      'SELECT id, email, phone, full_name, avatar_url, role, membership_plan, membership_status, donation_amount, created_at, updated_at FROM users WHERE id = $1',
       [sub]
     )
     if (!rows[0]) {
@@ -56,7 +56,7 @@ export async function optionalAuth(req, _res, next) {
     try {
       const { sub } = jwt.verify(token, JWT_SECRET)
       const { rows } = await db.query(
-        'SELECT id, email, phone, full_name, avatar_url, role, membership_plan, membership_status, created_at, updated_at FROM users WHERE id = $1',
+        'SELECT id, email, phone, full_name, avatar_url, role, membership_plan, membership_status, donation_amount, created_at, updated_at FROM users WHERE id = $1',
         [sub]
       )
       if (rows[0]) req.user = rows[0]

@@ -4,9 +4,22 @@ import { requireAuth, requireAdmin } from '../middleware/auth.js'
 
 const router = Router()
 
-const USER_COLS = 'id, email, full_name, avatar_url, role, membership_plan, membership_status, created_at, updated_at'
+const USER_COLS = 'id, email, full_name, avatar_url, role, membership_plan, membership_status, donation_amount, created_at, updated_at'
 
-// All routes require admin
+// POST /api/users/me/donate — any authenticated user
+router.post('/me/donate', requireAuth, async (req, res) => {
+  const { amount } = req.body
+  if (!amount || amount <= 0) {
+    return res.status(400).json({ error: 'Please enter a valid donation amount' })
+  }
+  const { rows } = await db.query(
+    `UPDATE users SET donation_amount = COALESCE(donation_amount, 0) + $1 WHERE id = $2 RETURNING ${USER_COLS}`,
+    [parseInt(amount, 10), req.user.id]
+  )
+  res.json({ user: rows[0] })
+})
+
+// All routes below require admin
 router.use(requireAuth, requireAdmin)
 
 // GET /api/users/stats/overview — must be above /:id

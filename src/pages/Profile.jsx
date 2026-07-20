@@ -87,6 +87,22 @@ export default function Profile() {
           </div>
         </Animate>
 
+        {/* Donation */}
+        {user?.donation_amount > 0 && (
+          <Animate animation="fade-up" delay={50}>
+            <div className="bg-white rounded-3xl border border-[#f0e9dd] shadow-sm p-6 mb-8 flex items-center gap-5">
+              <div className="w-14 h-14 rounded-2xl bg-[#FDEAEA] flex items-center justify-center flex-shrink-0">
+                <span className="text-2xl">❤️</span>
+              </div>
+              <div>
+                <h3 className="font-bold text-[#2d2d2d] font-display">Total Donated</h3>
+                <p className="text-2xl font-bold text-[#D45858] mt-1">Rs. {user.donation_amount.toLocaleString()}</p>
+                <p className="text-xs text-[#888] mt-1">Thank you for supporting Cool Kids Club!</p>
+              </div>
+            </div>
+          </Animate>
+        )}
+
         {/* Admin link */}
         {user?.role === 'admin' && (
           <Animate animation="fade-up" delay={100}>

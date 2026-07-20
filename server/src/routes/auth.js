@@ -5,7 +5,7 @@ import { requireAuth, signToken, COOKIE_OPTIONS } from '../middleware/auth.js'
 
 const router = Router()
 
-const USER_COLS = 'id, email, phone, full_name, avatar_url, age_range, reason, role, membership_plan, membership_status, created_at, updated_at'
+const USER_COLS = 'id, email, phone, full_name, avatar_url, age_range, reason, role, membership_plan, membership_status, donation_amount, created_at, updated_at'
 
 // POST /api/auth/signup
 router.post('/signup', async (req, res) => {
@@ -46,7 +46,7 @@ router.post('/login', async (req, res) => {
   }
 
   const { rows } = await db.query(
-    `SELECT id, email, phone, password_hash, full_name, avatar_url, age_range, reason, role, membership_plan, membership_status, created_at, updated_at FROM users WHERE email = $1`,
+    `SELECT id, email, phone, password_hash, full_name, avatar_url, age_range, reason, role, membership_plan, membership_status, donation_amount, created_at, updated_at FROM users WHERE email = $1`,
     [email.toLowerCase().trim()]
   )
   const row = rows[0]

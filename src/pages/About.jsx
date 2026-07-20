@@ -7,25 +7,7 @@ const team = [
     name: 'Areeba Rehman',
     role: 'Founder & CEO',
     bio: 'Mental health advocate, author, and youth speaker. Areeba started CKC after her own journey with anxiety as a teenager.',
-    img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&h=300&fit=crop&crop=face',
-  },
-  {
-    name: 'Marcus Reid',
-    role: 'Community Director',
-    bio: 'Social worker and certified life coach with 7 years experience supporting teens and young adults.',
-    img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
-  },
-  {
-    name: 'Priya Nair',
-    role: 'Wellness Lead',
-    bio: 'Mindfulness instructor and therapist-in-training. She designs our wellness workshops and peer circles.',
-    img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face',
-  },
-  {
-    name: 'Leo Santos',
-    role: 'Creative Director',
-    bio: 'Artist, storyteller, and creative facilitator who leads our monthly creativity challenges.',
-    img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face',
+    img: '/areeba_rehman.jpg',
   },
 ]
 
@@ -178,13 +160,13 @@ export default function About() {
           <Animate animation="fade-up">
             <div className="text-center mb-14">
               <span className="text-[#5DA05A] text-sm font-semibold uppercase tracking-widest">The Humans Behind CKC</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#2d2d2d] mt-2 font-display">Meet the Team</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#2d2d2d] mt-2 font-display">Meet the Founder</h2>
               <p className="text-[#555] mt-3 max-w-xl mx-auto">
-                Every person on our team has been through their own journey and is here because they genuinely believe in this community.
+                The heart and soul behind Cool Kids Club — building this community one genuine connection at a time.
               </p>
             </div>
           </Animate>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="max-w-sm mx-auto">
             {team.map((t, i) => (
               <Animate key={t.name} animation="fade-up" delay={i * 90}>
                 <div className="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-shadow h-full">

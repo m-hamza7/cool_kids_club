@@ -1,9 +1,11 @@
 ﻿import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import { users as usersApi } from '../lib/api'
 import Animate from '../components/Animate'
 import {
   Heart, Sparkles, Users, BookOpen, Leaf, Gift,
-  CheckCircle, HandRaised, DollarSign, Repeat, ArrowRight,
+  CheckCircle, HandRaised, ArrowRight,
 } from '../components/Icons'
 
 const impacts = [
@@ -51,19 +53,37 @@ const volunteerRoles = [
   { icon: <Gift className="w-5 h-5" />, label: 'Creative Sessions', desc: 'Lead or assist with creative activities such as art, journaling, or crafts.' },
 ]
 
-const PRESET_AMOUNTS = [5, 10, 25, 50]
-
 export default function Donate() {
-  const [frequency, setFrequency] = useState('one-time')
-  const [selected, setSelected] = useState(10)
-  const [custom, setCustom] = useState('')
+  const { user, refetchUser } = useAuth()
+  const navigate = useNavigate()
+  const [amount, setAmount] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState('')
 
-  const displayAmount = custom !== '' ? custom : selected
+  const handleDonationSubmit = async (e) => {
+    e.preventDefault()
+    if (!user) return navigate('/join')
+    const val = parseInt(amount, 10)
+    if (!val || val <= 0) return setError('Please enter a valid amount')
+
+    setError('')
+    setSubmitting(true)
+    try {
+      await usersApi.recordDonation({ amount: val })
+      await refetchUser()
+      setSubmitted(true)
+      setAmount('')
+    } catch (err) {
+      setError(err.message || 'Could not record donation')
+    }
+    setSubmitting(false)
+  }
 
   return (
     <div className="pt-20">
 
-      {/* ── Hero ── */}
+      {/* Hero */}
       <section className="relative bg-[#FAFAF5] overflow-hidden">
         <div className="absolute top-16 left-8 w-72 h-72 rounded-full bg-[#EEF7EE]/60 blur-3xl pointer-events-none" />
         <div className="absolute bottom-10 right-8 w-80 h-80 rounded-full bg-[#EEF3FD]/50 blur-3xl pointer-events-none" />
@@ -102,7 +122,7 @@ export default function Donate() {
         </div>
       </section>
 
-      {/* ── What Your Support Enables ── */}
+      {/* What Your Support Enables */}
       <section className="bg-white py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <Animate animation="fade-up">
@@ -132,95 +152,130 @@ export default function Donate() {
         </div>
       </section>
 
-      {/* ── Donation Form ── */}
+      {/* Donation Form */}
       <section id="donate-form" className="bg-[#EEF7EE] py-20 px-6">
         <div className="max-w-2xl mx-auto">
           <Animate animation="scale-up">
             <div className="bg-white rounded-3xl shadow-lg p-8 md:p-10">
-              <div className="text-center mb-8">
-              <div className="w-14 h-14 rounded-full bg-[#FDEAEA] flex items-center justify-center mx-auto mb-4">
-                <DollarSign className="w-7 h-7 text-[#D45858]" />
+
+              {submitted ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 rounded-full bg-[#EEF7EE] flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="w-8 h-8 text-[#5DA05A]" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-[#2d2d2d] mb-3">Thank You!</h3>
+                  <p className="text-[#555] mb-6">Your donation of Rs. {amount || 'your contribution'} has been recorded. You can see it on your profile.</p>
+                  <div className="flex gap-4 justify-center">
+                    <button
+                      onClick={() => setSubmitted(false)}
+                      className="px-6 py-2.5 rounded-full border-2 border-[#5DA05A] text-[#5DA05A] font-semibold hover:bg-[#5DA05A] hover:text-white transition-all"
+                    >
+                      Donate Again
+                    </button>
+                    <Link
+                      to="/profile"
+                      className="px-6 py-2.5 rounded-full bg-[#5DA05A] text-white font-semibold hover:bg-[#3D7840] transition-colors"
+                    >
+                      View Profile
+                    </Link>
+                  </div>
                 </div>
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-[#2d2d2d] mb-2">
-                  Choose Your Contribution
-                </h2>
-                <p className="text-[#777] text-sm">
-                  Donations are used to support community programs, event resources, and future initiatives.
-                </p>
-              </div>
+              ) : (
+                <>
+                  <div className="text-center mb-8">
+                    <div className="w-14 h-14 rounded-full bg-[#FDEAEA] flex items-center justify-center mx-auto mb-4">
+                      <Heart className="w-7 h-7 text-[#D45858]" />
+                    </div>
+                    <h2 className="font-display text-2xl md:text-3xl font-bold text-[#2d2d2d] mb-2">
+                      How to Donate
+                    </h2>
+                    <p className="text-[#777] text-sm">
+                      Send your donation via bank transfer and let us know the amount below.
+                    </p>
+                  </div>
 
-              {/* Frequency toggle */}
-              <div className="flex rounded-full border border-[#e0d8ce] p-1 mb-8 bg-[#FAFAF5]">
-                {['one-time', 'monthly'].map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => setFrequency(opt)}
-                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-full text-sm font-semibold transition-all ${
-                      frequency === opt
-                        ? 'bg-white shadow-sm text-[#2d2d2d]'
-                        : 'text-[#888] hover:text-[#555]'
-                    }`}
-                  >
-                    {opt === 'monthly' && <Repeat className="w-4 h-4" />}
-                    {opt === 'one-time' ? 'One-Time' : 'Monthly'}
-                  </button>
-                ))}
-              </div>
+                  {/* Step 1: Bank Details */}
+                  <div className="mb-8">
+                    <h4 className="text-sm font-bold text-[#2d2d2d] mb-3 flex items-center gap-2">
+                      <span className="w-6 h-6 rounded-full bg-[#5DA05A] text-white text-xs flex items-center justify-center font-bold">1</span>
+                      Send payment to this account
+                    </h4>
+                    <div className="bg-[#FAFAF5] rounded-xl p-5 border border-[#e8e0d8] space-y-3">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-[#888]">Account Name</span>
+                        <span className="font-semibold text-[#2d2d2d]">Areeba Rehman</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-[#888]">IBAN</span>
+                        <span className="font-semibold text-[#2d2d2d] text-xs sm:text-sm">PK10UNIL0109000336793339</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-[#888]">Bank</span>
+                        <span className="font-semibold text-[#2d2d2d]">UBL</span>
+                      </div>
+                    </div>
+                  </div>
 
-              {/* Preset amounts */}
-              <div className="grid grid-cols-4 gap-3 mb-4">
-                {PRESET_AMOUNTS.map((amt) => (
-                  <button
-                    key={amt}
-                    onClick={() => { setSelected(amt); setCustom('') }}
-                    className={`py-3 rounded-xl border-2 text-sm font-semibold transition-all ${
-                      selected === amt && custom === ''
-                        ? 'border-[#5DA05A] bg-[#EEF7EE] text-[#3D7840]'
-                        : 'border-[#e8e0d8] text-[#555] hover:border-[#5DA05A]'
-                    }`}
-                  >
-                    ${amt}
-                  </button>
-                ))}
-              </div>
+                  {/* Step 2: Record Amount */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-bold text-[#2d2d2d] mb-3 flex items-center gap-2">
+                      <span className="w-6 h-6 rounded-full bg-[#5DA05A] text-white text-xs flex items-center justify-center font-bold">2</span>
+                      Enter the amount you donated
+                    </h4>
 
-              {/* Custom amount */}
-              <div className="mb-8">
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#888] font-semibold">$</span>
-                  <input
-                    type="number"
-                    min="1"
-                    placeholder="Enter custom amount"
-                    value={custom}
-                    onChange={(e) => { setCustom(e.target.value); setSelected(null) }}
-                    className="w-full pl-8 pr-4 py-3 border-2 border-[#e8e0d8] rounded-xl text-sm text-[#2d2d2d] placeholder-[#bbb] focus:border-[#5DA05A] focus:outline-none transition-colors"
-                  />
-                </div>
-              </div>
+                    {error && (
+                      <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
+                        {error}
+                      </div>
+                    )}
 
-              <button className="w-full py-4 rounded-full bg-[#5DA05A] text-white font-bold text-base hover:bg-[#3D7840] transition-colors shadow-sm flex items-center justify-center gap-2">
-                <Heart className="w-5 h-5" />
-                {frequency === 'monthly'
-                  ? `Donate $${displayAmount || '...'} / month`
-                  : `Donate $${displayAmount || '...'} Once`}
-              </button>
+                    {!user && (
+                      <div className="mb-4 p-4 rounded-xl bg-[#FEF9EA] border border-[#D4A830]/30 text-sm text-[#555]">
+                        You need to <Link to="/join" className="text-[#5DA05A] font-semibold underline">create an account</Link> or <Link to="/login" className="text-[#5DA05A] font-semibold underline">sign in</Link> first so we can record your donation on your profile.
+                      </div>
+                    )}
 
-              <p className="text-center text-xs text-[#aaa] mt-4">
-                This is a community initiative. All contributions are voluntary and gratefully received.
-              </p>
+                    <form onSubmit={handleDonationSubmit}>
+                      <div className="relative mb-4">
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#888] font-semibold text-sm">Rs.</span>
+                        <input
+                          type="number"
+                          min="1"
+                          placeholder="Enter amount"
+                          value={amount}
+                          onChange={(e) => setAmount(e.target.value)}
+                          required
+                          className="w-full pl-12 pr-4 py-3 border-2 border-[#e8e0d8] rounded-xl text-sm text-[#2d2d2d] placeholder-[#bbb] focus:border-[#5DA05A] focus:outline-none transition-colors"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={submitting || !user}
+                        className="w-full py-4 rounded-full bg-[#5DA05A] text-white font-bold text-base hover:bg-[#3D7840] transition-colors shadow-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Heart className="w-5 h-5" />
+                        {submitting ? 'Recording...' : 'Record My Donation'}
+                      </button>
+                    </form>
+                  </div>
+
+                  <p className="text-center text-xs text-[#aaa]">
+                    Your donation will be visible on your profile. Thank you for supporting our community!
+                  </p>
+                </>
+              )}
             </div>
           </Animate>
         </div>
       </section>
 
-      {/* ── Where It Goes ── */}
+      {/* Where It Goes */}
       <section className="bg-white py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <Animate animation="fade-up">
             <div className="text-center mb-12">
               <h2 className="font-display text-3xl md:text-4xl font-bold text-[#2d2d2d] mb-4">
-                Where Every Penny Goes
+                Where Every Rupee Goes
               </h2>
               <p className="text-[#777] max-w-xl mx-auto">
                 We are committed to full transparency. Here is how we plan to use the funds raised by our community.
@@ -251,7 +306,7 @@ export default function Donate() {
         </div>
       </section>
 
-      {/* ── Volunteer Section ── */}
+      {/* Volunteer Section */}
       <section id="volunteer" className="bg-[#EEF3FD] py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <Animate animation="fade-up">
@@ -260,7 +315,7 @@ export default function Donate() {
                 <HandRaised className="w-4 h-4" /> Give Your Time
               </span>
               <h2 className="font-display text-3xl md:text-4xl font-bold text-[#2d2d2d] mb-4">
-                Can't Donate? Become a Volunteer.
+                {"Can't Donate? Become a Volunteer."}
               </h2>
               <p className="text-[#777] max-w-xl mx-auto">
                 Your time, energy, and passion are just as valuable as any financial contribution.
@@ -301,7 +356,7 @@ export default function Donate() {
         </div>
       </section>
 
-      {/* ── Reassurance / CTA ── */}
+      {/* Reassurance / CTA */}
       <section className="bg-[#FAFAF5] py-20 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <Animate animation="fade-up">
@@ -309,14 +364,14 @@ export default function Donate() {
               <CheckCircle className="w-8 h-8 text-[#5DA05A]" />
             </div>
             <h2 className="font-display text-3xl md:text-4xl font-bold text-[#2d2d2d] mb-5">
-              Every Penny Counts
+              Every Rupee Counts
             </h2>
             <p className="text-[#666] text-lg leading-relaxed mb-3">
               We are a grassroots community at the very beginning of our journey. There are no hidden fees, no
               corporate overhead — just a small team passionate about making a real difference.
             </p>
             <p className="text-[#777] mb-10">
-              Whether you give $5 or $50, donate your time, or simply spread the word — you are part of something meaningful.
+              Whether you give Rs. 100 or Rs. 5,000, donate your time, or simply spread the word — you are part of something meaningful.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a

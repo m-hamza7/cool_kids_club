@@ -64,4 +64,5 @@ export const users = {
   update: (id, body) => request(`/users/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
   delete: (id) => request(`/users/${id}`, { method: 'DELETE' }),
   stats: () => request('/users/stats/overview'),
+  recordDonation: (body) => request('/users/me/donate', { method: 'POST', body: JSON.stringify(body) }),
 }
