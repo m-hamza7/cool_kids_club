@@ -19,11 +19,8 @@ router.post('/me/donate', requireAuth, async (req, res) => {
   res.json({ user: rows[0] })
 })
 
-// All routes below require admin
-router.use(requireAuth, requireAdmin)
-
 // GET /api/users/stats/overview — must be above /:id
-router.get('/stats/overview', async (_req, res) => {
+router.get('/stats/overview', requireAuth, requireAdmin, async (_req, res) => {
   const { rows } = await db.query(`
     SELECT
       COUNT(*)::int AS "totalUsers",
@@ -37,7 +34,7 @@ router.get('/stats/overview', async (_req, res) => {
 })
 
 // GET /api/users
-router.get('/', async (req, res) => {
+router.get('/', requireAuth, requireAdmin, async (req, res) => {
   const { role, membership_plan, membership_status, search } = req.query
   let query = `SELECT ${USER_COLS} FROM users`
   const params = []
@@ -59,7 +56,7 @@ router.get('/', async (req, res) => {
 })
 
 // GET /api/users/:id
-router.get('/:id', async (req, res) => {
+router.get('/:id', requireAuth, requireAdmin, async (req, res) => {
   const { rows: userRows } = await db.query(`SELECT ${USER_COLS} FROM users WHERE id = $1`, [req.params.id])
   if (!userRows[0]) return res.status(404).json({ error: 'User not found' })
 
@@ -74,7 +71,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // PUT /api/users/:id
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireAuth, requireAdmin, async (req, res) => {
   const { full_name, role, membership_plan, membership_status } = req.body
   const sets = []
   const params = []
@@ -96,7 +93,7 @@ router.put('/:id', async (req, res) => {
 })
 
 // DELETE /api/users/:id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAuth, requireAdmin, async (req, res) => {
   if (req.params.id === req.user.id) {
     return res.status(400).json({ error: 'Cannot delete your own account' })
   }
